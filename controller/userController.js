@@ -1,12 +1,13 @@
 // dbconnection
 const dbconnection = require("../db/dbConfig");
 const bcrypt=require("bcrypt");
-const statusCode=require("http-status-codes")
+const statusCode = require("http-status-codes");
+
 
 async function register(req, res) {
   const {username,firstname,lastname,email,password}=req.body;
   if (!username || !firstname || !lastname || !email || !password) {
-    return res.status(statusCode.BAD_REQUEST).json({msg :" please provide all information"})
+    return res.status( statusCode.BAD_REQUEST).json({msg :" please provide all information"})
     
   } 
   try {
@@ -39,10 +40,57 @@ async function register(req, res) {
   }
   // res.send("Register");
 }
+// async function login(req, res) {
+//   // res.send(" user login");
+//   const {email,password}=req.body;
+//   if (!email || !password) {
+//     return res.status(statusCode.BAD_REQUEST).json({meg:"please enter all requied filds"})
+    
+//   }
+// }
+
 async function login(req, res) {
-  res.send(" user login");
+  const {email, password} = req.body;
+
+  // Check if email or password is missing
+  if (!email || !password) {
+    return res.status(400).json({ msg: "Please enter all required fields" });
+  }
+
+  //   placeholder logic for now
+  try {
+    const [user]=await dbconnection.query("SELECT username,userid,password from users where email=?",[email])
+    
+    if (user.length==0) {
+      return res.status(statusCode.BAD_REQUEST).json({msg:" Invalid cridential"})
+
+      
+    }
+    
+       
+      // compare password
+     const isMuch= await bcrypt.compare(password,user[0].password);
+     if (!isMuch) {
+       return res
+         .status(statusCode.BAD_REQUEST)
+         .json({ msg: " Invalid cridential(pasword)" });
+
+      
+     }
+     return res.json({user})
+
+     
+    
+  } catch (error) {
+    console.log(error.message)
+    return res.status(statusCode.INTERNAL_SERVER_ERROR).json({msg:"Somthing went wrong,try later!"})
+    
+  }
+  
 }
+
 async function checkUser(req, res) {
   res.send(" check user");
 }
 module.exports = { register, login, checkUser };
+
