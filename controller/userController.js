@@ -2,6 +2,7 @@
 const dbconnection = require("../db/dbConfig");
 const bcrypt=require("bcrypt");
 const statusCode = require("http-status-codes");
+const jwt=require("jsonwebtoken")
 
 
 async function register(req, res) {
@@ -77,7 +78,13 @@ async function login(req, res) {
 
       
      }
-     return res.json({user})
+    //  return res.json({user})
+
+    const username=user[0].username;
+    const userid=user[0].userid;
+   const token= jwt.sign({username,userid},"secret",{expiresIn:"1d"});
+   return res.status(statusCode.OK).json({msg:"user loginsuccesfull",token})
+
 
      
     
