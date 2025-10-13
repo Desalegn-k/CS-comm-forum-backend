@@ -12,6 +12,11 @@ const dbconnection=require("./db/dbConfig")
 
 // user route middleware file
 const userRoutes=require("./routes/userRoutes");
+// question route middleware file
+ const quesionRoute=require("./routes/questionRoute");
+
+//  authentication middleware file
+ const authMiddleware = require("./middleware/authmiddleware");
 
 // json data middleware
 
@@ -20,10 +25,13 @@ app.use(express.json());
 app.use("/api/users",userRoutes)
 
 // question routes middle ware
+app.use("api/question", authMiddleware, quesionRoute);
+
 
 //  answer routes middle ware
 async function start(){
   try {const reult=await dbconnection.execute("select 'test'");
+    console.log(reult[0])
     app.listen(port);
     console.log('database connection established');
     console.log(`the server listning on port ${port }`)
