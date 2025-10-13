@@ -82,7 +82,9 @@ async function login(req, res) {
 
     const username=user[0].username;
     const userid=user[0].userid;
-   const token= jwt.sign({username,userid},"secret",{expiresIn:"1d"});
+   const token = jwt.sign({ username, userid }, process.env.JWT_SECRET, {
+     expiresIn: "1d",
+   });
    return res.status(statusCode.OK).json({msg:"user loginsuccesfull",token})
 
 
@@ -100,7 +102,7 @@ async function checkUser(req, res) {
   const username= req.user.username;
   const userid = req.user.userid;
   res.status(statusCode.OK).json({msg:"valid user" ,username,userid});
-  res.send("check user")
+   
  
 }
 module.exports = { register, login, checkUser };

@@ -4,18 +4,21 @@ const {StatusCodes}=require("http-status-codes");
 async function authMiddleware(req,res,next) {
         const authHeader=req.headers.authorization
 
-         if (!authHeader || !authHeader.startsWith("Bearer")) {
+         if (!authHeader ||!authHeader.startsWith("Bearer")) {
            return res
              .status(StatusCodes.UNAUTHORIZED)
              .json({ error: "authentication invalidddd" });
          }
          const token=authHeader.split(' ')[1];
-         console.log(authHeader);
-         console.log(token)
+        //  console.log(authHeader);
+        //  console.log(token)
 
          try {
           //  const data = jwt.verify(authHeader, "secret");
-          const {username,userid}=jwt.verify(token,"secret");
+          const { username, userid } = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+          );
           req.user={username,userid}
           
            next();
@@ -24,7 +27,7 @@ async function authMiddleware(req,res,next) {
          } catch (error) {
            return res
              .status(StatusCodes.UNAUTHORIZED)
-             .json({ error: "authentication invalidddd" });
+             .json({ error: "authentication invalid" });
          }
         
       }

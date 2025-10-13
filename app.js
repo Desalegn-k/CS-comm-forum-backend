@@ -1,3 +1,5 @@
+
+ require("dotenv").config();
 const express=require('express');
 const app=express()
 const port=5300;
@@ -25,13 +27,13 @@ app.use(express.json());
 app.use("/api/users",userRoutes)
 
 // question routes middle ware
-app.use("api/question", authMiddleware, quesionRoute);
+app.use("/api/question", authMiddleware, quesionRoute);
 
 
 //  answer routes middle ware
 async function start(){
-  try {const reult=await dbconnection.execute("select 'test'");
-    console.log(reult[0])
+  try {const reult=await dbconnection.execute("select 'tes'");
+    // console.log(reult[0])
     app.listen(port);
     console.log('database connection established');
     console.log(`the server listning on port ${port }`)
