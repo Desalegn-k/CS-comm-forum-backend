@@ -8,7 +8,7 @@ const jwt=require("jsonwebtoken")
 async function register(req, res) {
   const {username,firstname,lastname,email,password}=req.body;
   if (!username || !firstname || !lastname || !email || !password) {
-    return res.status( statusCode.BAD_REQUEST).json({msg :" please provide all information"})
+    return res.status( statusCode.BAD_REQUEST).json({msg :" please provide all information ok"})
     
   } 
   try {

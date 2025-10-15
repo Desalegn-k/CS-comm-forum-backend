@@ -1,7 +1,8 @@
 
  require("dotenv").config();
 const express=require('express');
-const app=express()
+const app=express();
+const cors=require('cors')
 const port=5300;
 // dbconnection
 const dbconnection=require("./db/dbConfig")
@@ -17,10 +18,15 @@ const userRoutes=require("./routes/userRoutes");
 // question route middleware file
  const quesionRoute=require("./routes/questionRoute");
 
+ //  cors
+app.use(cors())
+
 //  authentication middleware file
  const authMiddleware = require("./middleware/authmiddleware");
 
+
 // json data middleware
+
 
 app.use(express.json());
 // user route middleware
