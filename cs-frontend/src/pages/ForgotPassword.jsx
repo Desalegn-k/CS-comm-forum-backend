@@ -1,15 +1,49 @@
-import React from 'react'
+ import React, { useState } from "react";
+ import axios from "axios";
+ import './css/ForgotPassword.css'
 
+ const ForgotPassword = () => {
+   const [email, setEmail] = useState("");
+   const [message, setMessage] = useState("");
 
-export default function ForgotPassword() {
-  return (
-    <>
-      <section>
-      <h2 className='reset'>Reset your password</h2>
-        <form>
-          <input name="email" type="email" placeholder="Enter your email to reset your password" />
-        </form>
-      </section>
-    </>
-  );
-}
+   const handleSubmit = async (e) => {
+     e.preventDefault();
+     try {
+       const res = await axios.post(
+         "http://localhost:5300/api/users/forgot-password",
+         { email }
+       );
+       setMessage(res.data.msg);
+     } catch (err) {
+       setMessage("Error sending reset link");
+     }
+   };
+
+   return (
+     <div
+       style={{ textAlign: "center", marginTop: "100px" }}
+       className="classfor"
+     >
+       <h2>Forgot Password</h2>
+       <form onSubmit={handleSubmit} className="">
+         <div className="resetemail">
+           <input
+             className="forget"
+             type="email"
+             placeholder="Enter your email"
+             value={email}
+             onChange={(e) => setEmail(e.target.value)}
+             required
+           />
+         </div>
+
+         <div className="resetbtn">
+           <button type="submit" className="">Send Reset Link</button>
+         </div>
+       </form>
+       <p>{message}</p>
+     </div>
+   );
+ };
+
+ export default ForgotPassword;
